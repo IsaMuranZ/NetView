@@ -3,17 +3,37 @@
 from flask import current_app as app
 from flask import jsonify
 # The application will need to be able to generate JSON
-from .models import Device
+from .models import Device, TrafficStat
+
 
 # route for landing page
 @app.route('/')
 def home():
     return jsonify({"message": "Welcome to the Network Monitoring Tool!"})
 
+
 # Endpoint for retrieving data on devices
-@app.route('/devices')
+@app.route('/devices', methods=['GET'])
 def list_devices():
-    # Placeholder for device listing
+    # query the entire list of devices
     devices = Device.query.all()
-    device_list = [{'ip': d.ip_address, 'mac': d.mac_address, 'hostname': d.hostname, 'status': d.status} for d in devices]
+
+    # format the resulting data from the query above into a list with useful tags
+    device_list = [{'ip': d.ip_address, 'mac': d.mac_address, 'hostname': d.hostname, 'status': d.status}
+                   for d in devices]
     return jsonify(device_list)
+
+
+# Endpoint for retrieving traffic stats in the database
+@app.route('/traffic', methods=['GET'])
+def get_traffic_stats():
+    # query the entire list of traffic statistics
+    stats = TrafficStat.query.all()
+    traffic_data = [
+        {
+            'ip': stat.ip_address,
+            'bytes': stat.bytes_transferred,
+            'packets': stat.packets_transferred
+        } for stat in stats
+    ]
+    return jsonify(traffic_data)
