@@ -14,6 +14,12 @@ class Device(db.Model):
     mac_address = db.Column(db.String(17), nullable=False)
     hostname = db.Column(db.String(255))
     status = db.Column(db.String(50))
+    # new fields to store data from additional functionality
+    open_ports = db.Column(db.String(255))
+    services = db.Column(db.String(255))
+
+    def __repr__(self):
+        return f'<Device {self.ip_address}>'
 
 
 # Class for storing statistics about bandwidth usage in database
@@ -27,6 +33,5 @@ class TrafficStat(db.Model):
     # New field to indicate a device that's part of internal network traffic
     is_internal = db.Column(db.Boolean, default=False)
 
-
-def __repr__(self):
-    return f'<Device {self.ip_address}>'
+    def __repr__(self):
+        return f'<TrafficStat {self.ip_address}>'

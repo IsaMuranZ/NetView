@@ -19,8 +19,16 @@ def list_devices():
     devices = Device.query.all()
 
     # format the resulting data from the query above into a list with useful tags
-    device_list = [{'ip': d.ip_address, 'mac': d.mac_address, 'hostname': d.hostname, 'status': d.status}
-                   for d in devices]
+    device_list = [
+        {
+            'ip': d.ip_address,
+            'mac': d.mac_address,
+            'hostname': d.hostname,
+            'status': d.status,
+            'ports': d.open_ports,
+            'services': d.services
+        }for d in devices
+    ]
     return jsonify(device_list)
 
 
@@ -33,7 +41,8 @@ def get_traffic_stats():
         {
             'ip': stat.ip_address,
             'bytes': stat.bytes_transferred,
-            'packets': stat.packets_transferred
+            'packets': stat.packets_transferred,
+            'is_internal': stat.is_internal
         } for stat in stats
     ]
     return jsonify(traffic_data)
