@@ -57,6 +57,7 @@ def save_traffic_stats_to_db():
             if existing_stat:
                 existing_stat.bytes_transferred += stats['bytes']
                 existing_stat.packets_transferred += stats['packets']
+                existing_stat.is_internal = is_internal_network(ip)
             else:
                 # New IP in traffic sniff data so create a new entry to the database
                 new_stat = TrafficStat(
