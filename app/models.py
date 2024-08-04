@@ -1,7 +1,9 @@
 # app/models.py
 # The purpose of this file is to define the database models that will
 # be used by other functions and for persistent storage
-from . import db
+from flask_sqlalchemy import SQLAlchemy
+# moved the database declaration from __init__.py to this file
+db = SQLAlchemy()
 
 
 # Device class used when detecting devices on the network and storing in database
@@ -22,6 +24,8 @@ class TrafficStat(db.Model):
     ip_address = db.Column(db.String(15), nullable=False)
     bytes_transferred = db.Column(db.Integer, default=0)
     packets_transferred = db.Column(db.Integer, default=0)
+    # New field to indicate a device that's part of internal network traffic
+    is_internal = db.Column(db.Boolean, default=False)
 
 
 def __repr__(self):

@@ -2,8 +2,9 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+# Below two imports are for changes to the database that require migration
+from flask_migrate import Migrate
+from .models import db
 
 
 def create_app():
@@ -15,6 +16,8 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
+    migrate = Migrate(app, db)
+    # Initialize Flask-Migrate with the app and db. This is for migrations
 
     with app.app_context():
         # Import parts of our application

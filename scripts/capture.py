@@ -30,6 +30,12 @@ def packet_callback(packet):
         traffic_stats[ip_dst]['packets'] += 1
 
 
+# check if IP is part of internal network. Currently hardcoded for a certain range.
+# Needs to be extended
+def is_internal_network(ip_address):
+    return ip_address.startswith('192.168.1.')
+
+
 # packet capture function. listens on an ethernet interface for a minute, recording traffic
 def start_packet_capture(interface='eth0', duration=60):
     print(f"Starting packet capture on {interface}")
@@ -56,7 +62,8 @@ def save_traffic_stats_to_db():
                 new_stat = TrafficStat(
                     ip_address=ip,
                     bytes_transferred=stats['bytes'],
-                    packets_transferred=stats['packets']
+                    packets_transferred=stats['packets'],
+                    is_internal=is_internal_network(ip)
                 )
                 db.session.add(new_stat)
             db.session.commit()
