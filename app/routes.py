@@ -44,8 +44,10 @@ def list_devices():
 # Endpoint for retrieving traffic stats in the database
 @app.route('/traffic', methods=['GET'])
 def get_traffic_stats():
-    # query the entire list of traffic statistics
-    stats = TrafficStat.query.all()
+    # Query traffic stats and prioritize internal network traffic
+    stats = TrafficStat.query.order_by(TrafficStat.is_internal.desc().nullslast(),
+                                       TrafficStat.bytes_transferred.desc()).all()
+
     traffic_data = [
         {
             'ip': stat.ip_address,

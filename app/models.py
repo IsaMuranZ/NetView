@@ -10,7 +10,7 @@ db = SQLAlchemy()
 class Device(db.Model):
     # TODO: add history or last connected column
     id = db.Column(db.Integer, primary_key=True)
-    ip_address = db.Column(db.String(15), nullable=False)
+    ip_address = db.Column(db.String(15), nullable=False, unique=True)
     mac_address = db.Column(db.String(17), nullable=False)
     hostname = db.Column(db.String(255))
     status = db.Column(db.String(50))

@@ -27,20 +27,22 @@ traffic_stats = defaultdict(lambda: {'bytes': 0, 'packets': 0})
 # check if IP is part of internal network. Currently hardcoded for a certain range.
 # Needs to be extended
 def is_internal_network(ip_address):
-    return ip_address.startswith('192.168.1.')
+    return ip_address.startswith('192.168.1.') or ip_address.startswith('192.168.88.')
 
 
 # This function uses nmap to return a list of devices on a network range and their details and
 # returns them.
-def scan_network(network_range):
+def scan_network(net_range):
     # TODO: make the script run faster and fix the sudo issues that make it run slow.
     # Perform an ARP scan for better MAC address detection on the local network
-    nm.scan(hosts=network_range, arguments='-PR -T5 --host-timeout 30s')  # -PR for ARP scan
+    nm.scan(hosts=net_range, arguments='-PR -T5 --host-timeout 30s')  # -PR for ARP scan
     # PE is pinging, PR is ARP requests, and increasing the host timeout for more reliable
     # scans. Added T5 for more aggressive scanning
 
     with app.app_context():
         for host in nm.all_hosts():
+            # consider fixing the duplicated code fragment warnings by defining a function that's used
+            # in both continuous_monitoring and network_map
             mac_address = nm[host]['addresses'].get('mac', 'N/A')
             # moved the ip field to a variable outside the device dict
             ip_address = nm[host]['addresses'].get('ipv4', '')
@@ -133,12 +135,12 @@ def save_traffic_stats_to_db():
 
 
 # function that runs indefinetly to add any new devices/traffic and update existing records
-def continuous_monitoring(network_range, interface, scan_interval=300):
-    print(f"Starting continuous monitoring on interface {interface} for network {network_range}")
+def continuous_monitoring(net_range, iface, scan_interval=300):
+    print(f"Starting continuous monitoring on interface {iface} for network {net_range}")
 
     while True:
         # Perform a network scan
-        scan_network(network_range)
+        scan_network(net_range)
 
         # Start packet capture for a duration equal to half the scan interval
         sniff(iface=interface, prn=packet_callback, store=False, timeout=scan_interval / 2)
