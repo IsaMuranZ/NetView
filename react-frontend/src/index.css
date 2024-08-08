@@ -2,3 +2,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'DataGothic';
+    src: url('./Assets/fonts/data-latin.ttf') format('truetype'),
+         url('./Assets/fonts/data-unifon.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.font-datadog {
+    font-family: 'DataGothic', sans-serif;
+}

@@ -19,7 +19,8 @@ interface Device {
 const App: React.FC = () => {
   const [devices, setDevices] = useState<Device[]>([]);
   const [visibleDevices, setVisibleDevices] = useState(4);
-  // The visible devices
+  // The visible devices is the starting amount of devices displayed on the homescreen
+
   useEffect(() => {
     // Fetch devices from the backend
     // Axios makes the request, the then method takes the response and runs the setDevices() method.
@@ -33,37 +34,42 @@ const App: React.FC = () => {
         });
   }, []);
 
+  // Function that renders additional devices.
+  const loadMoreDevices = () => {
+      setVisibleDevices(prevVisibleDevices => prevVisibleDevices + 4);
+  };
   return (
-      <div className="App">
-        <h1>Network Devices</h1>
-        <table>
-          <thead>
-          <tr>
-            <th>IP Address</th>
-            <th>MAC Address</th>
-            <th>Hostname</th>
-            <th>Status</th>
-            <th>Open Ports</th>
-            <th>Services</th>
-            <th>Traffic (Bytes)</th>
-            <th>Traffic (Packets)</th>
-          </tr>
-          </thead>
-          <tbody>
-          {devices.map((device, index) => (
-              <tr key={index}>
-                <td>{device.ip}</td>
-                <td>{device.mac}</td>
-                <td>{device.hostname}</td>
-                <td>{device.status}</td>
-                <td>{device.open_ports}</td>
-                <td>{device.services}</td>
-                <td>{device.traffic_bytes}</td>
-                <td>{device.traffic_packets}</td>
-              </tr>
-          ))}
-          </tbody>
-        </table>
+      <div className="p-4">
+          <header className="flex justify-between items-center bg-blue-900 p-4 text-white">
+              <h1 className="text-4xl font-datadog">NetView</h1>
+              <a href="/networkvisual" className="text-xl font-datadog underline">Network Visualization</a>
+          </header>
+          <main className="mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {devices.slice(0, visibleDevices).map((device, index) => (
+                      <div key={index} className="bg-white p-4 rounded shadow-md">
+                          <p><strong>IP Address:</strong> {device.ip}</p>
+                          <p><strong>MAC Address:</strong> {device.mac}</p>
+                          <p><strong>Hostname:</strong> {device.hostname}</p>
+                          <p><strong>Status:</strong> {device.status}</p>
+                          <p><strong>Open Ports:</strong> {device.open_ports}</p>
+                          <p><strong>Services:</strong> {device.services}</p>
+                          <p><strong>Traffic (Bytes):</strong> {device.traffic_bytes}</p>
+                          <p><strong>Traffic (Packets):</strong> {device.traffic_packets}</p>
+                      </div>
+                  ))}
+              </div>
+              {visibleDevices < devices.length && (
+                  <div className="mt-4 text-center">
+                      <button
+                          className="bg-blue-500 text-white py-2 px-4 rounded"
+                          onClick={loadMoreDevices}
+                      >
+                          Load More
+                      </button>
+                  </div>
+              )}
+          </main>
       </div>
   );
 };
