@@ -18,7 +18,8 @@ interface Device {
 
 const App: React.FC = () => {
   const [devices, setDevices] = useState<Device[]>([]);
-
+  const [visibleDevices, setVisibleDevices] = useState(4);
+  // The visible devices
   useEffect(() => {
     // Fetch devices from the backend
     // Axios makes the request, the then method takes the response and runs the setDevices() method.

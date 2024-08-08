@@ -6,12 +6,20 @@ from flask import jsonify
 from .models import Device, TrafficStat, db
 from sqlalchemy.orm import aliased
 # aliased is needed for join clarity
+from flask import current_app as app, send_from_directory
+# this ties our static files so data is served to the frontend
+import os
 
 
-# route for landing page
-@app.route('/')
-def home():
-    return jsonify({"message": "Welcome to the Network Monitoring Tool!"})
+# default index page
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        # fall back to index.html for client side routing if the path doesn't exist
+        return send_from_directory(app.static_folder, 'index.html')
 
 
 # Endpoint for retrieving data on devices
