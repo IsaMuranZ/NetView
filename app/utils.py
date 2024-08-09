@@ -49,6 +49,6 @@ def perform_tcp_traceroute(target_ip, dport=80):
 
 
 # Example: Traceroute to a target IP
-target_ip = '192.168.88.'
+target_ip = '192.168.88.109'
 path = perform_tcp_traceroute(target_ip)
 print(f"Traceroute to {target_ip}: {path}")

@@ -6,9 +6,10 @@ from flask import jsonify
 from .models import Device, TrafficStat, db
 from sqlalchemy.orm import aliased
 # aliased is needed for join clarity
-from flask import current_app as app, send_from_directory
+from flask import current_app as app, send_from_directory, send_file
 # this ties our static files so data is served to the frontend
 import os
+from scripts.visualize_topology import visualize_topology
 
 
 # default index page
@@ -65,3 +66,13 @@ def get_traffic_stats():
         } for stat in stats
     ]
     return jsonify(traffic_data)
+
+
+# endpoint for topology visualization
+@app.route('/topology', methods=['GET'])
+def network_topology():
+    # Generate the network topology image
+    img_path = visualize_topology()
+
+    # Serve the image file
+    return send_file(img_path, mimetype='image/png')
