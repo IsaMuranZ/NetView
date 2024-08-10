@@ -5,7 +5,7 @@ const NetworkTopology: React.FC = () => ( // These components don't return JSX e
     // they are incorporated by the react-router-dom module into their appropriate pages
     <div className="p-4">
         <header className="flex justify-between items-center bg-blue-900 p-4 text-white">
-            <h1 className="text-4xl font-datadog">NetView</h1>
+            <h1 className="text-4xl font-datadog">NetView-&gt;Network Visual</h1>
             <Link to="/" className="text-xl font-datadog underline">Home</Link>
         </header>
         <div className="mt-4 flex justify-center">

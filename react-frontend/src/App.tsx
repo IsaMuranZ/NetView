@@ -2,6 +2,7 @@
 
 import Home from './components/home';
 import NetworkTopology from './components/topology';
+import Traffic from './components/traffic';
 // our components for corresponding pages in our app
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -54,7 +55,7 @@ const App: React.FC = () => {
           return (bytes/1_000_000).toFixed(2) + 'mb'
       if(bytes > 1_000)
           return (bytes/1_000).toFixed(2) + 'kb'
-      return bytes + ''
+      return bytes + 'B'
   }
 
   // Helper function to split apart data in some of the device data fields
@@ -76,6 +77,7 @@ const App: React.FC = () => {
                   />}
               />
               <Route path="/topology" element={<NetworkTopology />} />
+              <Route path="/traffic" element={<Traffic />} />
           </Routes>
       </Router>
   );

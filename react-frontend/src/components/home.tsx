@@ -5,6 +5,7 @@ import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 // tooltips used on the main page
 
+
 interface Device {
     ip: string;
     mac: string;
@@ -26,7 +27,10 @@ const Home: React.FC<{ devices: Device[], visibleDevices: number, loadMoreDevice
     <div className="p-4">
         <header className="flex justify-between items-center bg-blue-900 p-4 text-white">
             <h1 className="text-4xl font-datadog">NetView</h1>
-            <Link to="/topology" className="text-xl font-datadog underline">Network Visualization</Link>
+            <div className="justify-end">
+                <Link to="/traffic" className="text-xl font-datadog underline me-5">Traffic</Link>
+                <Link to="/topology" className="text-xl font-datadog underline">Network Visualization</Link>
+            </div>
         </header>
         <main className="mt-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
